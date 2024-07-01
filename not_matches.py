@@ -2,7 +2,7 @@ import sys
 from collections import defaultdict, Counter
 
 def normalize_primer_name(primer_name):
-    return primer_name.strip().replace("Primer Names: ", "")
+    return primer_name.strip().replace("Primer Names: ", "") #previous versions resulted in duplicate names for some primers
 
 def count_primer_frequencies(input_file):
     primer_frequencies = Counter()
@@ -33,14 +33,14 @@ def main():
         print("Usage: python3 no_matches.py fasta_primer_dictionary.txt")
         return
 
-    input_file = sys.argv[1]
+    input_file = sys.argv[1] #this is the output file from primer_dictionaries.py
     primer_frequencies, primer_occurrences, fasta_associations, all_fasta_names = count_primer_frequencies(input_file)
 
     for primer_name, frequency in primer_frequencies.items():
         occurrence_count = len(primer_occurrences[primer_name])
         print(f"Primer Name: {primer_name}, Frequency: {frequency}, Occurrences: {occurrence_count}")
 
-    print("\nFasta names not associated with each individual primer:")
+    print("\nFasta names not associated with each individual primer:") #this output only accounts for fasta names or seq_ids that have amplicons generated from extract_amplicon_from_primersearch_output_UnO.py 
     for primer_name in primer_frequencies:
         unused_fasta_files = all_fasta_names - fasta_associations[primer_name]
         if unused_fasta_files:

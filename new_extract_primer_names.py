@@ -12,11 +12,11 @@ def find_keys_with_values(dictionaries, target_values):
 
 def main():
     if len(sys.argv) != 2:
-        print("Usage: python script.py input_file.txt")
+        print("Usage: python3 new_extract_primer_names.py primer_fasta_with_desired_prefixes.txt")
         return
 
-    input_file = sys.argv[1]
-    output_file = "primers_in_all_rep_species.txt"  # Set the output file name here
+    input_file = sys.argv[1] #this is the output file from primer_dict_redo.py
+    output_file = "primers_in_all_rep_species.txt"  # output file 
 
     with open(input_file, "r") as file:
         lines = file.readlines()
@@ -27,7 +27,7 @@ def main():
         values = [value.strip("' ") for value in values_str.strip(" []").split(",")]
         dictionaries.append({key: values})
 
-    target_values = {'1143560907', '749310542', '749314519', '1004367656', '1133548812', '983532915', '1151114342', '58156'}  # Note: Using strings as values
+    target_values = {'1143560907', '749310542', '749314519', '1004367656', '1133548812', '983532915', '1151114342', '58156'}  # pathogen specific fasta names or seq_ids, here they are salmonella seq_ids
 
     matching_keys = find_keys_with_values(dictionaries, target_values)
 

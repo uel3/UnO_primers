@@ -2,7 +2,7 @@ import sys
 from collections import defaultdict, Counter
 
 def normalize_primer_name(primer_name):
-    return primer_name.strip().replace("Primer Names: ", "")
+    return primer_name.strip().replace("Primer Names: ", "") #this makes primer names consistent and does not results in duplicates
 
 def count_primer_frequencies(input_file):
     primer_frequencies = Counter()
@@ -26,7 +26,7 @@ def count_primer_frequencies(input_file):
 
 def main():
     if len(sys.argv) != 2:
-        print("Usage: python3 primer_coverage.py input_file.txt")
+        print("Usage: python3 primer_coverage.py fasta_primer_dictionary.txt")
         return
 
     input_file = sys.argv[1]
@@ -36,7 +36,7 @@ def main():
     for primer_name, frequency in primer_frequencies.items():
         occurrence_count = len(primer_occurrences[primer_name])
         coverage_percentage = (occurrence_count / total_fasta_names) * 100
-        print(f"Primer Name: {primer_name}, Frequency: {frequency}, Coverage: {coverage_percentage:.2f}%")
+        print(f"Primer Name: {primer_name}, Frequency: {frequency}, Coverage: {coverage_percentage:.2f}%")  #coverage is based on the number of fasta names or seq_ids that had ampliccons generated, if not all then the max value is based on the number of seq_ids that had amplicons
 
 if __name__ == "__main__":
     main()
