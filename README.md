@@ -39,7 +39,7 @@ $ find . -type f -name "*meta*" -size +21c | while read -r file; do tail -n +2 "
 ```
 3. primer_dict_redo.py will create a dictionary of the primers for the bug specific seq_ids or fasta names in which they generate the amplicons
 ```bash
-$ python3 primer_dict_redo.py concatonated_files.txt 
+$ python3 primer_dict_redo.py concatenated_files.txt 
 ```
 Output generated from this script: primer_fasta_with_desired_prefixes.txt which contains only primers that generate amplicons in any Salmonella from "valid_prefixes". This will need to be modified depending on which stool genomes from which you are trying generate amplicons.
 

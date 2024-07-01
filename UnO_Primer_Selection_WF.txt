@@ -46,7 +46,7 @@ with open('primer_fasta_with_desired_prefixes.txt', 'w') as file:
     for primer, fasta_list in filtered_dict.items():
         file.write(f"{primer}: {fasta_list}\n")
 
-python3 new_extract_primer_names.py #this will take the input from primer_dict_redo.py and tell you which primers from that dictionary have amplicons in all desired fasta names
+python3 new_extract_primer_names.py primer_fasta_with_desired_prefixes.txt #this will take the output from primer_dict_redo.py and tell you which primers from that dictionary have amplicons in all desired fasta names
 import sys
 
 def find_keys_with_values(dictionaries, target_values):
@@ -61,7 +61,7 @@ def find_keys_with_values(dictionaries, target_values):
 
 def main():
     if len(sys.argv) != 2:
-        print("Usage: python script.py input_file.txt")
+        print("Usage: python3 new_extract_primer_names.py primer_fasta_with_desired_prefixes.txt")
         return
 
     input_file = sys.argv[1]
@@ -111,7 +111,7 @@ def create_dictionaries(input_file):
 
 def main():
     if len(sys.argv) != 2:
-        print("Usage: python script.py input_file.txt")
+        print("Usage: python3 primer_dictionaries.py concatenated_file_secondary.txt")
         return
 
     input_file = sys.argv[1]
@@ -154,7 +154,7 @@ def count_primer_frequencies(input_file):
 
 def main():
     if len(sys.argv) != 2:
-        print("Usage: python3 primer_coverage.py input_file.txt")
+        print("Usage: python3 primer_coverage.py fasta_primer_dictionary.txt)
         return
 
     input_file = sys.argv[1]

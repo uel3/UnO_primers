@@ -42,7 +42,7 @@ The primer_dict_redo.py is specific to the Salmonella seq_ids or "valid_prefixes
 
 valid_prefixes = ["1143560907", "749310542", "749314519", "1004367656", "1133548812", "983532915", "1151114342", "58156"]  
 ```bash
-$ python3 primer_dict_redo.py concatonated_files.txt 
+$ python3 primer_dict_redo.py concatenated_files.txt 
 ```
 Output generated from this script: primer_fasta_with_desired_prefixes.txt which contains only primers that generate amplicons in any Salmonella 
 Use new_extract_primer_names.py to identify primers that generate amplicons in all Salmonella from primer_dict_redo.py output primer_fasta_with_desired_prefixes.txt
