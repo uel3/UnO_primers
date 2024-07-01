@@ -3,10 +3,11 @@
 This is a collection of scripts used to parse potential UnO primers for Salmonella from MRI Global
 
 A. Before beginning these steps, primer files should be in the following tab seperated format: primer_name   forward_primer_sequence reverse_primer_seqeunce
-
+```bash
 nontyphi_nucl_18mers_sam_0_FR	TACCAATTCCGCCACCTTCG	CGAAGGTGGCGGAATTGGTA
 nontyphi_nucl_18mers_sam_1_FR	ACTTCTGAGTTCGGCATGGG	CCCATGCCGAACTCAGAAGT
 Paratyphi_ABC_18mer_nucl_sam_86_FR	GGACGGTCGCTACATCAACA	CGGTTCGATGTTCATGGTGC
+```
 
 ## Requirements for using these scripts
 Follow the download instructions to use the repo (https://github.com/uel3/HMAS-QC-Pipeline_UnO)
