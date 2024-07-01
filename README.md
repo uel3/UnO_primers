@@ -8,6 +8,7 @@ nontyphi_nucl_18mers_sam_0_FR	TACCAATTCCGCCACCTTCG	CGAAGGTGGCGGAATTGGTA
 nontyphi_nucl_18mers_sam_1_FR	ACTTCTGAGTTCGGCATGGG	CCCATGCCGAACTCAGAAGT
 Paratyphi_ABC_18mer_nucl_sam_86_FR	GGACGGTCGCTACATCAACA	CGGTTCGATGTTCATGGTGC
 ```
+See primers.txt for an example primer file
 
 ## Requirements for using these scripts
 Follow the download instructions to use the repo (https://github.com/uel3/HMAS-QC-Pipeline_UnO)
