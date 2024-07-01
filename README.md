@@ -2,7 +2,7 @@
 
 This is a collection of scripts used to parse potential UnO primers for Salmonella from MRI Global
 
-Before beginning these steps, primer files should be in the following tab seperated format: primer_name   forward_primer_sequence reverse_primer_seqeunce
+A. Before beginning these steps, primer files should be in the following tab seperated format: primer_name   forward_primer_sequence reverse_primer_seqeunce
 
 nontyphi_nucl_18mers_sam_0_FR	TACCAATTCCGCCACCTTCG	CGAAGGTGGCGGAATTGGTA
 nontyphi_nucl_18mers_sam_1_FR	ACTTCTGAGTTCGGCATGGG	CCCATGCCGAACTCAGAAGT
@@ -22,6 +22,7 @@ max_seqid_len = 50
 Python3 is required for both HMAS-QC-Pipeline and the following parsing scripts Download python [here](https://www.python.org/downloads/)
 
 ## Using the scripts
+1. Run candidate primers against database of choice, which in this case is folder of stool genomes in fasta format
 
 $ python3 ~/HMAS-QC-Pipeline/extract_amplicon_from_primersearch_output_UnO.py -s path/to/folder/with/database/genomes -p path/to/formatted/primers.txt
 
@@ -31,46 +32,37 @@ fasta_metasheet.csv
 fasta_not_match_primers.txt
 fasta.ps
 
-The metasheet.csv file contains the seq_id,primer,sample for the queried fasta files and primers that generate amplicons in line with the UnO parameters
-Concatenate all metasheet.csv files greater than 21, any metasheet.csv file less than 21 is empty, meaning no amplicons were generated 
+2. Concatenate all metasheet.csv files greater than 21 bytes, any metasheet.csv file less than 21 bytes is empty, meaning no amplicons were generated 
 
 $ find . -type f -name "*meta*" -size +21c | while read -r file; do tail -n +2 "$file"; done > concatenated_file.txt
 
-The concatenated file contains seq_id,primer,sample for all primers that generated amplicons
-primer_dict_redo.py will create a dictionary of the primers for the bug specific seq_ids or fasta names in which they generate the amplicons
-The primer_dict_redo.py is specific to the Salmonella seq_ids or "valid_prefixes" from the JSB database and will need to be adapted for each bug for which you are attempting to idenitfy primers
-
-valid_prefixes = ["1143560907", "749310542", "749314519", "1004367656", "1133548812", "983532915", "1151114342", "58156"]  
+3. primer_dict_redo.py will create a dictionary of the primers for the bug specific seq_ids or fasta names in which they generate the amplicons
 
 $ python3 primer_dict_redo.py concatonated_files.txt 
 
-Output generated from this script: primer_fasta_with_desired_prefixes.txt which contains only primers that generate amplicons in any Salmonella 
-Use new_extract_primer_names.py to identify primers that generate amplicons in all Salmonella from primer_dict_redo.py output primer_fasta_with_desired_prefixes.txt
+Output generated from this script: primer_fasta_with_desired_prefixes.txt which contains only primers that generate amplicons in any Salmonella from "valid_prefixes". This will need to be modified depending on which stool genomes from which you are trying generate amplicons.
+
+4. Use new_extract_primer_names.py to identify primers that generate amplicons in all Salmonella from primer_dict_redo.py output primer_fasta_with_desired_prefixes.txt
 
 $ python3 new_extract_primer_names.py primer_fasta_with_desired_prefixes.txt
-Output generated from this script: primers_in_all_rep_species.txt will contain only the primer names of the primers that only generate amplicons in Salmonella and in all Salmonella
+Output generated from this script: primers_in_all_rep_species.txt will contain only the primer names of the primers that only generate amplicons in Salmonella and in all Salmonella found in "tagert_values". This will need to be modified depending on which stool genomes from which you are trying generate amplicons.
 
-The new_extract_primer_names.py is also pathogen specific containing "target_values" for the Salmonella seq_ids:
-target_values = {'1143560907', '749310542', '749314519', '1004367656', '1133548812', '983532915', '1151114342', '58156'}
 
-Using grep and the output from new_extract_primer_names.py, primers_in_all_rep_species.txt, we create a new primer file from the original primer file to limit our candidate primers to those that only generate amplicons in Salmonella and generate amplicons in all Salmonella
+5. Using grep and the output from new_extract_primer_names.py, primers_in_all_rep_species.txt, we create a new primer file from the original primer file to limit our candidate primers to those that only generate amplicons in Salmonella and generate amplicons in all Salmonella
 
 $ grep -f primers_in_all_rep_species.txt primers.txt > secondary_test_primers.txt
 
-To identify the breadth of the candidate primers, use the secondary_test_primers.txt to check amplicons in a bug specific database
+6. To identify the breadth of the candidate primers, use the secondary_test_primers.txt to check amplicons in a bug specific database
+
 $ python3 ~/HMAS-QC-Pipeline/extract_amplicon_from_primersearch_output_UnO.py -s path/to/bug/specific/database/genomes-p ~path/to/primer_file/secondary_test_primers.txt
 
-Concatenate all non-empty metasheet.csv to generate a list of seq_id,primer,sample for all primers that generated amplicons
+7. Concatenate all non-empty metasheet.csv to generate a list of seq_id,primer,sample for all primers that generated amplicons
 $ find . -type f -name "*meta*" -size +21c | while read -r file; do tail -n +2 "$file"; done > concatenated_file_secondary.txt
 
-In order to evaluate the breadth of amplcions generated by the candidate primers, use primer_dictionaries.py to create a dictionary to generate various statistics
+8. In order to evaluate the breadth of amplcions generated by the candidate primers, use primer_dictionaries.py to create a dictionary to generate various statistics
 $ python3 primer_dictionaries.py concatenated_file_secondary.txt
 
-primer_dictionaries.py outputs fasta_primer_dictionary.txt in the following format:
-Fasta Name: seq_id
-  Primer Names: primer_1, primer_2, primer_3
-
-primer_coverage.py will generate coverage statistics of the bug specific database, frequency is the number of amplicons that are generated by that primer in the bug specific database, coverage is the percentage of amplicons generated in the bug specific database
+9. primer_coverage.py will generate coverage statistics of the bug specific database, frequency is the number of amplicons that are generated by that primer in the bug specific database, coverage is the percentage of amplicons generated in the bug specific database
 
 $ python3 primer_coverage.py fasta_primer_dictionary.txt
 
@@ -78,7 +70,7 @@ Primer Name: primer_1, Frequency: 262, Coverage: 98.50%
 Primer Name: primer_2, Frequency: 227, Coverage: 85.34%
 Primer Name: primer_3, Frequency: 266, Coverage: 100.00%
 
-not_matches.py takes fasta_primer_dictionary.txt as input and will generate the same stats as primer_coverage.py but also which seq_ids from the bug specfic database that do not have amplicons generated by the candidate primers. It's worth noting the coverage calculations is dependent on the maximum number of fasta names. If amplicons are not generated in all fasta names from the bug specific database, the coverage calculation will be based on the maximum number of fasta names that result in amplicons. For example, if a bug specific databse contains 266 fasta names/seq_ids, only 260 have amplicons generated by the candidate primers, coverage calulations will be out of 260 instead of 266. The not_matches.py script will also only tell you the fasta names/seq_ids that do not generate amplicons from the 260 fasta names and not the 266. 
+10. not_matches.py takes fasta_primer_dictionary.txt as input and will generate the same stats as primer_coverage.py but also which seq_ids from the bug specfic database that do not have amplicons generated by the candidate primers. It's worth noting the coverage calculations is dependent on the maximum number of fasta names. If amplicons are not generated in all fasta names from the bug specific database, the coverage calculation will be based on the maximum number of fasta names that result in amplicons. For example, if a bug specific databse contains 266 fasta names/seq_ids, only 260 have amplicons generated by the candidate primers, coverage calulations will be out of 260 instead of 266. The not_matches.py script will also only tell you the fasta names/seq_ids that do not generate amplicons from the 260 fasta names and not the 266. 
 
 $ python3 not_matches.py fasta_primer_dictionary.txt
 
