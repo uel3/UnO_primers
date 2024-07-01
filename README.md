@@ -16,10 +16,13 @@ This is branched from (https://github.com/ncezid-biome/HMAS-QC-Pipeline) develop
 The UnO_params branch contains the script with the UnO amplicon parameters (https://github.com/uel3/HMAS-QC-Pipeline_UnO/tree/UnO_params)
 
 The parameters are :
+```bash
 mismatch_percent = 6
 min_amplicon_len = 100
 max_amplicon_len = 500
 max_seqid_len = 50
+```
+
 
 Python3 is required for both HMAS-QC-Pipeline and the following parsing scripts Download python [here](https://www.python.org/downloads/)
 
